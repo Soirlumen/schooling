@@ -1,6 +1,6 @@
 import numpy as np  # knihovna numpy na pomoc s maticemi
 import sympy as sp  # sympy pro symbolické výpočty využita v třídě pro výpočet vlastních čísel
-
+from scipy.linalg import null_space
 
 # hlavní třída, která funguje pro zadávání matic a kontroluje zda uživatel zadává správné hodnoty
 class rodicmatic:
@@ -208,3 +208,5 @@ while True:
     if pokracovat != "ano":
         print("děkuji za použití programu. Nashledanou!")
         break
+
+
