@@ -3,7 +3,7 @@ import sympy as sp  # sympy pro symbolické výpočty využita v třídě pro v�
 from scipy.linalg import null_space
 
 # hlavní třída, která funguje pro zadávání matic a kontroluje zda uživatel zadává správné hodnoty
-class rodicmatic:
+class Rodicmatic:
     def __init__(self):
         self.rozmer = 0  # proměnná pro  rozměr matice
         self.matice = None  # proměnná pro samotnou matici
@@ -43,19 +43,19 @@ class rodicmatic:
             i += 1  # Přejdeme na další řádek
 
     # celé sestavení matice, použitá v dalších odvozených třídách v metodě run
-    def udelejmatici(self):
+    def udelej_matici(self):
         self.nastav_rozmer()  # nastavíme rozměr matice
         self.sestav_matici()  # sestavíme matici
 
 
-# třída pro výpočet determinantu, dědí od třídy rodicmatic
-class Determinant(rodicmatic):
+# třída pro výpočet determinantu, dědí od třídy Rodicmatic
+class Determinant(Rodicmatic):
     def __init__(self):
         super().__init__()  # voláme konstruktor rodičovské třídy (bude stejné i v dalších třídách)
         self.determinant = 1  # základní hodnota  determinantu
 
     # metoda pro výpočet determinantu
-    def calculate(self):
+    def kalkulovat(self):
         rozmer = len(self.matice)  # zjistíme rozměr matice
 
         # cyklus přes všechny řádky matice
@@ -85,20 +85,20 @@ class Determinant(rodicmatic):
 
     # metoda která spustí celý výpočet (podobná i v dalších odvozených třídách)
     def run(self):
-        super().udelejmatici()
-        self.calculate()
+        super().udelej_matici()
+        self.kalkulovat()
         print('determinant:')
         print(self.determinant)
 
 
-# třída pro výpočet inverzní matice, dědí od třídy rodicmatic
-class inverzni_matice(rodicmatic):
+# třída pro výpočet inverzní matice, dědí od třídy Rodicmatic
+class Inverznimatice(Rodicmatic):
     def __init__(self):
         super().__init__()
         self.invmat = None
 
     # metoda pro výpočet inverzní matice
-    def calculate(self):
+    def kalkulovat(self):
         rozmer = len(self.matice)  # zjistíme rozměr matice
         jedmat = np.identity(rozmer)  # vytvoříme jednotkovou matici stejného rozměru
         rozmat = np.hstack([self.matice, jedmat])  # rozšíříme naší matici o jednotkovou
@@ -128,11 +128,11 @@ class inverzni_matice(rodicmatic):
         print(self.invmat)  # vypíšeme výslednou inverzní matici
 
     def run(self):
-        super().udelejmatici()
-        self.calculate()
+        super().udelej_matici()
+        self.kalkulovat()
 
 
-class vlastni_cisla(rodicmatic):
+class vlastni_cisla(Rodicmatic):
     def __init__(self):
         super().__init__()
         self.lambd = sp.Symbol('σ')  # definitivně lambda :D (pro samotný kód naprosto nepodstatný, jaký znak tam bude)
@@ -157,7 +157,7 @@ class vlastni_cisla(rodicmatic):
         return lambmat
 
     # hlavní metoda pro výpočet vlastních čísel !pozor, v mém programu chci pouze reálná vlasntí čísla
-    def calculate(self):
+    def kalkulovat(self):
         lambda_matice = self.lammat()  # získání matice  (A-lambda*I)
         lambda_det = self.det_rozvojem(lambda_matice)  # výpočet determinantu této matice
         vlastcis = sp.solve(lambda_det, self.lambd)  # řešení rovnice vzniklé z determinantu
@@ -167,8 +167,8 @@ class vlastni_cisla(rodicmatic):
         return realvlastcis
 
     def run(self):
-        self.udelejmatici()
-        vlastni_cisla = self.calculate()
+        self.udelej_matici()
+        vlastni_cisla = self.kalkulovat()
         print(f"Vlastní čísla matice jsou: {vlastni_cisla}")
 
 
@@ -191,7 +191,7 @@ while True:
         d = Determinant()
         d.run()
     elif volba == "2":
-        i = inverzni_matice()
+        i = Inverznimatice()
         i.run()
 
     elif volba == "3":
@@ -204,9 +204,13 @@ while True:
         print("Neplatná volba, zkuste to znovu.")  # když uživatel zadá něco jiného než v nabídce
 
     # dotaz, zda uživatel chce pokračovat s dalšími výpočty a případně ukončí
-    pokracovat = input("chcete pokrčovat?(ano/ne): ").lower()
-    if pokracovat != "ano":
+    pokracovat = input("chcete pokračovat?(ano/ne): ").lower()
+    if pokracovat == "ano":
+        pass
+    elif pokracovat == "ne":
         print("děkuji za použití programu. Nashledanou!")
         break
+    else:
+        print("neplatná volba, vracím do hlavního menu :3")
 
 
