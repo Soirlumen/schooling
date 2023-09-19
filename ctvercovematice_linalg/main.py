@@ -3,7 +3,7 @@ import sympy as sp  # sympy pro symbolické výpočty využita v třídě pro v�
 from scipy.linalg import null_space
 
 # hlavní třída, která funguje pro zadávání matic a kontroluje zda uživatel zadává správné hodnoty
-class Rodicmatic:
+class RodicMatic():
     def __init__(self):
         self.rozmer = 0  # proměnná pro  rozměr matice
         self.matice = None  # proměnná pro samotnou matici
@@ -13,14 +13,14 @@ class Rodicmatic:
         while True:  # cyklus pro opakovaný vstup od uživatele
             try:
                 # získáme rozměr matice od uživatele
-                self.rozmer = int(input('zadejte prosím kladné celé číslo pro rozměr čtvercové matice: '))
+                self.rozmer = int(input("Zadejte prosím kladné celé číslo pro rozměr čtvercové matice: "))
                 if self.rozmer > 0:  # 0věříme, že je rozměr kladný
                     break
 
                 else:
-                    print('rozměr musí být kladné celé číslo')
+                    print("Rozměr musí být kladné celé číslo!")
             except ValueError:  # zachytíme chybu, pokud vstup není celé číslo
-                print('Rozměr musí být kladné celé číslo')
+                print("Rozměr musí být kladné celé číslo!")
 
     # metoda pro sestavení matice
     def sestav_matici(self):
@@ -29,16 +29,16 @@ class Rodicmatic:
         i = 0  # index řádku
         while i < self.rozmer:  # cyklus  pro každý řádek matice
             # získáme prvky řádku od uživatele
-            prvky = input(f'zadejte {self.rozmer} hodnot pro řádek {i + 1}, oddělené mezerou: ').split()
+            prvky = input(f"Zadejte {self.rozmer} hodnot pro řádek {i + 1}, oddělené mezerou: ").split()
             if len(prvky) != self.rozmer:  # Ověříme počet prvků v řádku
-                print('špatný počet prvků, zkuste to znovu')
+                print("Špatný počet prvků, zkuste to znovu!")
                 continue
 
             try:
                 # převedeme prvky na čisla a uložíme do matice
                 self.matice[i] = [float(prvek) for prvek in prvky]
             except ValueError:  # zachytíme chybu, pokud prvek není číslo
-                print('zadejte pouze čísla, zkuste to znovu')
+                print("Zadejte pouze čísla, zkuste to znovu!")
                 continue
             i += 1  # Přejdeme na další řádek
 
@@ -48,8 +48,8 @@ class Rodicmatic:
         self.sestav_matici()  # sestavíme matici
 
 
-# třída pro výpočet determinantu, dědí od třídy Rodicmatic
-class Determinant(Rodicmatic):
+# třída pro výpočet determinantu, dědí od třídy RodicMatic
+class Determinant(RodicMatic):
     def __init__(self):
         super().__init__()  # voláme konstruktor rodičovské třídy (bude stejné i v dalších třídách)
         self.determinant = 1  # základní hodnota  determinantu
@@ -87,12 +87,12 @@ class Determinant(Rodicmatic):
     def run(self):
         super().udelej_matici()
         self.kalkulovat()
-        print('determinant:')
+        print("Determinant: ")
         print(self.determinant)
 
 
-# třída pro výpočet inverzní matice, dědí od třídy Rodicmatic
-class Inverznimatice(Rodicmatic):
+# třída pro výpočet inverzní matice, dědí od třídy RodicMatic
+class Inverznimatice(RodicMatic):
     def __init__(self):
         super().__init__()
         self.invmat = None
@@ -109,7 +109,7 @@ class Inverznimatice(Rodicmatic):
             rozmat[[i, max_rad], :] = rozmat[[max_rad, i], :]  # prohodíme řádky
             pivot = rozmat[i, i]  # nastavíme pivotový prvek
             if pivot == 0:  # pokud je pivotový prvek nula, není k ní inverzní a vyskakujeme ze smyčky
-                print('matice není regularní a není k ní inverzní')
+                print("Matice není regularní a není k ní inverzní.")
                 return
             rozmat[i, :] /= pivot  # normalizujeme itý řádek
 
@@ -124,7 +124,7 @@ class Inverznimatice(Rodicmatic):
 
         # uložíme inverzní matici
         self.invmat = rozmat[:, rozmer:]
-        print('matice k ní inverzní:')  # vypíšeme výsledek
+        print("Matice k ní inverzní:")  # vypíšeme výsledek
         print(self.invmat)  # vypíšeme výslednou inverzní matici
 
     def run(self):
@@ -132,10 +132,10 @@ class Inverznimatice(Rodicmatic):
         self.kalkulovat()
 
 
-class vlastni_cisla(Rodicmatic):
+class VlastniCisla(RodicMatic):
     def __init__(self):
         super().__init__()
-        self.lambd = sp.Symbol('σ')  # definitivně lambda :D (pro samotný kód naprosto nepodstatný, jaký znak tam bude)
+        self.lambd = sp.Symbol("σ")  # definitivně lambda :D (pro samotný kód naprosto nepodstatný, jaký znak tam bude)
 
     # pomocná metoda pro výpočet determinantu matice pomocí rozvoje (jiný styl než který používám pro determinant)
     def det_rozvojem(self, matrix):
@@ -168,8 +168,8 @@ class vlastni_cisla(Rodicmatic):
 
     def run(self):
         self.udelej_matici()
-        vlastni_cisla = self.kalkulovat()
-        print(f"Vlastní čísla matice jsou: {vlastni_cisla}")
+        VlastniCisla = self.kalkulovat()
+        print(f"Vlastní čísla matice jsou: {VlastniCisla}")
 
 
 ################## samotný program
@@ -184,7 +184,7 @@ while True:
     print("4: ukončit")
 
     # uživatel zadá možnost
-    volba = input("zadejte číslo odpovídající vaší volbě: ")
+    volba = input("Zadejte číslo odpovídající vaší volbě: ")
 
     # dle volby spustí danou třídu s výpočtem
     if volba == "1":
@@ -195,10 +195,10 @@ while True:
         i.run()
 
     elif volba == "3":
-        v = vlastni_cisla()
+        v = VlastniCisla()
         v.run()
     elif volba == "4":
-        print("děkuji za použití programu")  # ukončení programu
+        print("Děkuji za použití programu.")  # ukončení programu
         break
     else:
         print("Neplatná volba, zkuste to znovu.")  # když uživatel zadá něco jiného než v nabídce
@@ -208,9 +208,9 @@ while True:
     if pokracovat == "ano":
         pass
     elif pokracovat == "ne":
-        print("děkuji za použití programu. Nashledanou!")
+        print("Děkuji za použití programu. Nashledanou :3")
         break
     else:
-        print("neplatná volba, vracím do hlavního menu :3")
+        print("Neplatná volba, vracím do hlavního menu :3")
 
 
